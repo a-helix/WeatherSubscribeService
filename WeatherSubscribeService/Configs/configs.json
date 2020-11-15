@@ -1,0 +1,7 @@
+{
+  "WeatherApiQueueKey": "WeatherApi",
+  "TelegramBotQueueKey": "TelegramBot",
+  "SubscriotionQueueKey": "Subscription",
+  "SubscriotionKey": "Subscribe",
+  "CanceledSubscriotionKey": "Canceled Subscription"
+}
