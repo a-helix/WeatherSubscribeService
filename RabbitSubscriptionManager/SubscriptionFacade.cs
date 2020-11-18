@@ -23,6 +23,7 @@ namespace RabbitSubscription
             _consumer = consumer;
             _publisher = publisher;
             _subject = new Subject();
+            Restart();
             
         }
 
@@ -96,6 +97,23 @@ namespace RabbitSubscription
                         throw new ArgumentException($"Invalid value of {key}. Only {subscriptionKey} and {cancelSubscriptionKey} are excepted.");
                     }
                 }   
+            }
+        }
+
+        private void Restart()
+        {
+            var activeSubscriptions = _databaseClient.AllActiveSubscriptions();
+            Observer observer;
+            foreach(var i in activeSubscriptions)
+            {
+                observer = new Observer(_configPath,
+                        i.UserID,
+                        i.Location,
+                        i.RequestsPerHour,
+                        _consumer,
+                        _publisher);
+                observer._updateTime = (int)i.LastSent;
+                _subject.Attach(observer);
             }
         }
     }

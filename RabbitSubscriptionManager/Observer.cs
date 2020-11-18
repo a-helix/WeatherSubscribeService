@@ -10,7 +10,7 @@ namespace RabbitSubscription
         private string _userID { get; }
         private string _location { get; }
         private int _responsesPerHour;
-        private int _updateTime;
+        public int _updateTime { get; set; }
         private Consumer _consumer;
         private Publisher _publisher;
         private int _hour = 1000 * 60 * 60;
