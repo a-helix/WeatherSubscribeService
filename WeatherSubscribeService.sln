@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherSubscribeService", "WeatherSubscribeService\WeatherSubscribeService.csproj", "{95B4DFD5-99C8-467E-BDB0-6F12D36BCEE0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitChat", "RabbitChat\RabbitChat\RabbitChat.csproj", "{E3CC44C4-00C6-456D-8E39-EAE6D0814EB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseClient", "DatabaseClient\DatabaseClient\DatabaseClient.csproj", "{E336B87F-D525-4909-8FE5-F18681BBC3EB}"
@@ -14,6 +12,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Credentials", "DatabaseClient\Credentials\Credentials\Credentials.csproj", "{148826F7-34C5-4455-A63A-5693090E29DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitSubscription", "RabbitSubscriptionManager\RabbitSubscription.csproj", "{FCE97E26-2701-4CDC-B1CF-6F691990A075}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E336B87F-D525-4909-8FE5-F18681BBC3EB} = {E336B87F-D525-4909-8FE5-F18681BBC3EB}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +24,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{95B4DFD5-99C8-467E-BDB0-6F12D36BCEE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95B4DFD5-99C8-467E-BDB0-6F12D36BCEE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95B4DFD5-99C8-467E-BDB0-6F12D36BCEE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95B4DFD5-99C8-467E-BDB0-6F12D36BCEE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3CC44C4-00C6-456D-8E39-EAE6D0814EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3CC44C4-00C6-456D-8E39-EAE6D0814EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3CC44C4-00C6-456D-8E39-EAE6D0814EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +44,10 @@ Global
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

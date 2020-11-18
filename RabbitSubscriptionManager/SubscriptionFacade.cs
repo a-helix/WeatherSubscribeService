@@ -1,7 +1,9 @@
-﻿using Credentials;
-using RabbitChat;
-using System;
+﻿using System;
 using System.Threading;
+using Credentials;
+using RabbitChat;
+using DatabaseClient;
+using Repository;
 
 namespace RabbitSubscription
 {
@@ -12,14 +14,16 @@ namespace RabbitSubscription
         private Consumer _consumer;
         private Publisher _publisher;
         private Subject _subject;
+        private MySqlDatabaseClient _databaseClient;
 
-        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher)
+        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher, IRepository<Subscription> database)
         {
             _configPath = configPath;
             _configContent = new JsonFileContent(configPath);
             _consumer = consumer;
             _publisher = publisher;
             _subject = new Subject();
+            
         }
 
         public void Run()
@@ -30,8 +34,8 @@ namespace RabbitSubscription
             {
                 _subject.Notify();
                 Thread.Sleep(1000);
+                _databaseClient.Save();
             }
-
         }
 
         private void ControlSubscriptions()
@@ -39,6 +43,7 @@ namespace RabbitSubscription
             string rabbitFeedback;
             JsonStringContent feedbackContent;
             Observer observer;
+            Subscription subscription;
             string subscriptionQueueKey = _configContent.Value("SubscriotionQueueKey").ToString();
             string subscriptionKey = _configContent.Value("SubscriotionKey").ToString();
             string cancelSubscriptionKey = _configContent.Value("CanceledSubscriotionKey").ToString();
@@ -58,15 +63,33 @@ namespace RabbitSubscription
                         (int)feedbackContent.Value("ResponsesPerHour"),
                         _consumer,
                         _publisher);
+
                 lock (_subject)
                 {
                     if (key.Equals(subscriptionKey))
                     {
-                         _subject.Attach(observer);
+                        _subject.Attach(observer);
+                        subscription = new Subscription();
+                        subscription.ID = feedbackContent.Value("ID").ToString();
+                        subscription.UserID = feedbackContent.Value("UserID").ToString();
+                        subscription.Location = feedbackContent.Value("Location").ToString();
+                        subscription.RequestsPerHour = (int)feedbackContent.Value("ResponsesPerHour");
+                        subscription.Active = true;
+                        subscription.Status = "Started";
+                        subscription.CreatedAt = DateTime.UtcNow.Ticks;
+                        subscription.ExpiredAt = 0;
+                        subscription.LastSent = DateTime.UtcNow.Ticks;
+                        _databaseClient.Create(subscription);
                     }
                     else if (key.Equals(cancelSubscriptionKey))
                     {
-                         _subject.Detach(observer);
+                        subscription = _databaseClient.Read(feedbackContent.Value("ID").ToString());
+                        subscription.Active = false;
+                        subscription.Status = "Stoped";
+                        subscription.ExpiredAt = DateTime.UtcNow.Ticks;
+                        _databaseClient.Delete(feedbackContent.Value("ID").ToString());
+                        _databaseClient.Create(subscription);
+                        _subject.Detach(observer);
                     }
                     else
                     {
