@@ -107,11 +107,11 @@ namespace RabbitSubscription
             foreach(var i in activeSubscriptions)
             {
                 observer = new Observer(_configPath,
-                        i.UserID,
-                        i.Location,
-                        i.RequestsPerHour,
-                        _consumer,
-                        _publisher);
+                                        i.UserID,
+                                        i.Location,
+                                        i.RequestsPerHour,
+                                        _consumer,
+                                        _publisher);
                 observer._updateTime = (int)i.LastSent;
                 _subject.Attach(observer);
             }
