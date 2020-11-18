@@ -25,12 +25,10 @@ namespace RabbitSubscription
             _updateTime = (int)DateTime.UtcNow.Ticks;
             _consumer = consumer;
             _publisher = publisher;
-
         }
 
         public void Update()
         {
-            
             int now = (int)DateTime.UtcNow.Ticks;
             if ((now-_updateTime) >= (_hour/_responsesPerHour))
             {
@@ -39,7 +37,6 @@ namespace RabbitSubscription
                 _publisher.SendQueue(_configs.Value("TelegramBotQueueKey").ToString(), response);
                 _updateTime = (int)DateTime.UtcNow.Ticks;
             }
-
         }
 
         private string RabbitFeedback(string location)
@@ -54,10 +51,9 @@ namespace RabbitSubscription
                 System.Threading.Thread.Sleep(10);
             }
             return response;
-            
         }
 
-        public bool SameTo(IObserver observer)
+        public override bool Equals(object observer)
         {
             Observer observ = (Observer) observer;
             if (observ._userID == this._userID && observ._location == this._location)

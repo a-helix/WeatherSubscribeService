@@ -14,15 +14,21 @@ namespace RabbitSubscription
 
         public void Attach(IObserver observer)
         {
-            _buffer.Add(observer);
+            lock(_buffer)
+            {
+                _buffer.Add(observer);
+            }
         }
 
         public void Detach(IObserver observer)
         {
-            foreach(IObserver i in _buffer)
+            lock (_buffer)
             {
-                if (i.SameTo(observer))
-                    _buffer.Remove(i);
+                foreach (IObserver i in _buffer)
+                {
+                    if (i.Equals(observer))
+                        _buffer.Remove(i);
+                }
             }
         }
 
