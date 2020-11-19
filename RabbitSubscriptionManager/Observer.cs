@@ -22,24 +22,24 @@ namespace RabbitSubscription
             _location = location;
             _configs = new JsonFileContent(configPath);
             _responsesPerHour = responsesPerHour;
-            _updateTime = (int)DateTime.UtcNow.Ticks;
+            _updateTime = Convert.ToInt32(DateTime.UtcNow.Ticks);
             _consumer = consumer;
             _publisher = publisher;
         }
 
         public void Update()
         {
-            int now = (int)DateTime.UtcNow.Ticks;
+            int now = Convert.ToInt32(DateTime.UtcNow.Ticks);
             if ((now-_updateTime) >= (_hour/_responsesPerHour))
             {
                 _publisher.SendQueue(_configs.Value("WeatherApiQueueKey").ToString(), _location);
-                string response = RabbitFeedback(_location);
+                string response = RabbitFeedback();
                 _publisher.SendQueue(_configs.Value("TelegramBotQueueKey").ToString(), response);
                 _updateTime = (int)DateTime.UtcNow.Ticks;
             }
         }
 
-        private string RabbitFeedback(string location)
+        private string RabbitFeedback()
         {
             string response = null;
             int timer = 0;

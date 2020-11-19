@@ -71,16 +71,14 @@ namespace RabbitSubscription
                 SubscriptionStrategy strategy;
                 if (key.Equals(_subscriptionKey))
                 {
-                    strategy = new SubscribeStrategy(_databaseClient);
+                    strategy = new SubscribeStrategy(_databaseClient, _subject, observer);
                     strategy.Execute(feedbackContent);
-                    _subject.Attach(observer);
                     continue;
                 }
                 if (key.Equals(_cancelSubscriptionKey))
                 {
-                    strategy = new AbortedSubscriptionStrategy(_databaseClient);
+                    strategy = new AbortedSubscriptionStrategy(_databaseClient, _subject, observer);
                     strategy.Execute(feedbackContent);
-                    _subject.Detach(observer);
                     continue;
                 }
                 throw new ArgumentException($"Invalid value of {key}. Only {_subscriptionKey} and {_cancelSubscriptionKey} are excepted.");
@@ -89,7 +87,7 @@ namespace RabbitSubscription
 
         private void Restart()
         {
-            var activeSubscriptions = _databaseClient.AllActiveSubscriptions();
+            var activeSubscriptions = _databaseClient.AllActive();
             Observer observer;
             foreach (var i in activeSubscriptions)
             {
@@ -97,60 +95,6 @@ namespace RabbitSubscription
                 observer._updateTime = Convert.ToInt32(i.LastSent);
                 _subject.Attach(observer);
             }
-        }
-    }
-
-    public abstract class SubscriptionStrategy
-    {
-        protected IUnitOfWork<Subscription> unitOfWork;
-
-        public SubscriptionStrategy(IUnitOfWork<Subscription> unit)
-        {
-            unitOfWork = unit;
-        }
-
-        public abstract void Execute(JsonStringContent feedbackContent);
-    }
-
-    public class SubscribeStrategy : SubscriptionStrategy
-    {
-        public SubscribeStrategy(IUnitOfWork<Subscription> unit) : base(unit)
-        {
-
-        }
-
-        public override void Execute(JsonStringContent feedbackContent)
-        {
-            Subscription subscription = new Subscription();
-            subscription.ID = Convert.ToString(feedbackContent.Value("ID"));
-            subscription.UserID = Convert.ToString(feedbackContent.Value("UserID"));
-            subscription.Location = Convert.ToString(feedbackContent.Value("Location"));
-            subscription.RequestsPerHour = Convert.ToInt32(feedbackContent.Value("ResponsesPerHour"));
-            subscription.Active = true;
-            subscription.Status = "Started";
-            subscription.CreatedAt = DateTime.UtcNow.Ticks;
-            subscription.ExpiredAt = 0;
-            subscription.LastSent = DateTime.UtcNow.Ticks;
-            unitOfWork.Create(subscription);
-        }
-    }
-
-    public class AbortedSubscriptionStrategy : SubscriptionStrategy
-    {
-        public AbortedSubscriptionStrategy(IUnitOfWork<Subscription> unit) : base(unit)
-        {
-
-        }
-
-        public override void Execute(JsonStringContent feedbackContent)
-        {
-            Subscription subscription = new Subscription();
-            subscription = unitOfWork.Read(Convert.ToString(feedbackContent.Value("ID")));
-            subscription.Active = false;
-            subscription.Status = "Stoped";
-            subscription.ExpiredAt = DateTime.UtcNow.Ticks;
-            unitOfWork.Delete(Convert.ToString(feedbackContent.Value("ID")));
-            unitOfWork.Create(subscription);
         }
     }
 }
