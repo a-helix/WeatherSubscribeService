@@ -27,9 +27,9 @@ namespace RabbitSubscription
             _publisher = publisher;
             _subject = new Subject();
             _databaseClient = database;
-            _subscriptionQueueKey = _configContent.Value("SubscriotionQueueKey").ToString();
-            _subscriptionKey = _configContent.Value("SubscriotionKey").ToString();
-            _cancelSubscriptionKey = _configContent.Value("CanceledSubscriotionKey").ToString();
+            _subscriptionQueueKey = Convert.ToString(_configContent.Value("SubscriotionQueueKey"));
+            _subscriptionKey = Convert.ToString(_configContent.Value("SubscriotionKey"));
+            _cancelSubscriptionKey = Convert.ToString(_configContent.Value("CanceledSubscriotionKey"));
             Restart();
         }
 
@@ -61,11 +61,11 @@ namespace RabbitSubscription
                 }
 
                 feedbackContent = new JsonStringContent(rabbitFeedback);
-                string key = feedbackContent.Value("Subscription").ToString();
+                string key = Convert.ToString(feedbackContent.Value("Subscription"));
                 observer = new Observer(_configPath,
-                        feedbackContent.Value("UserID").ToString(),
-                        feedbackContent.Value("Location").ToString(),
-                        (int)feedbackContent.Value("ResponsesPerHour"),
+                        Convert.ToString(feedbackContent.Value("UserID")),
+                        Convert.ToString(feedbackContent.Value("Location")),
+                        Convert.ToInt32(feedbackContent.Value("ResponsesPerHour")),
                         _consumer,
                         _publisher);
 
@@ -95,7 +95,7 @@ namespace RabbitSubscription
             foreach (var i in activeSubscriptions)
             {
                 observer = new Observer(_configPath, i.UserID, i.Location, i.RequestsPerHour, _consumer, _publisher);
-                observer._updateTime = (int)i.LastSent;
+                observer._updateTime = Convert.ToInt32(i.LastSent);
                 _subject.Attach(observer);
             }
         }
@@ -124,10 +124,10 @@ namespace RabbitSubscription
         public override void Execute(JsonStringContent feedbackContent)
         {
             Subscription subscription = new Subscription();
-            subscription.ID = feedbackContent.Value("ID").ToString();
-            subscription.UserID = feedbackContent.Value("UserID").ToString();
-            subscription.Location = feedbackContent.Value("Location").ToString();
-            subscription.RequestsPerHour = (int)feedbackContent.Value("ResponsesPerHour");
+            subscription.ID = Convert.ToString(feedbackContent.Value("ID"));
+            subscription.UserID = Convert.ToString(feedbackContent.Value("UserID"));
+            subscription.Location = Convert.ToString(feedbackContent.Value("Location"));
+            subscription.RequestsPerHour = Convert.ToInt32(feedbackContent.Value("ResponsesPerHour"));
             subscription.Active = true;
             subscription.Status = "Started";
             subscription.CreatedAt = DateTime.UtcNow.Ticks;
@@ -147,11 +147,11 @@ namespace RabbitSubscription
         public override void Execute(JsonStringContent feedbackContent)
         {
             Subscription subscription = new Subscription();
-            subscription = unitOfWork.Read(feedbackContent.Value("ID").ToString());
+            subscription = unitOfWork.Read(Convert.ToString(feedbackContent.Value("ID")));
             subscription.Active = false;
             subscription.Status = "Stoped";
             subscription.ExpiredAt = DateTime.UtcNow.Ticks;
-            unitOfWork.Delete(feedbackContent.Value("ID").ToString());
+            unitOfWork.Delete(Convert.ToString(feedbackContent.Value("ID")));
             unitOfWork.Create(subscription);
         }
     }
