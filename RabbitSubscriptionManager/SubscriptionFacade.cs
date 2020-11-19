@@ -3,7 +3,6 @@ using System.Threading;
 using Credentials;
 using RabbitChat;
 using DatabaseClient;
-using Repository;
 
 namespace RabbitSubscription
 {
@@ -100,7 +99,6 @@ namespace RabbitSubscription
             }
         }
     }
-
 
     public abstract class SubscriptionStrategy
     {
