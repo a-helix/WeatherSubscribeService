@@ -3,7 +3,7 @@
 
 namespace RabbitSubscription
 {
-    class Subject : ISubject
+    public class Subject : ISubject
     {
         private List<IObserver> _buffer;
 
