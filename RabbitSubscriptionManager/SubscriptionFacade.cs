@@ -3,6 +3,7 @@ using System.Threading;
 using Credentials;
 using RabbitChat;
 using DatabaseClient;
+using Repository;
 
 namespace RabbitSubscription
 {
@@ -13,12 +14,12 @@ namespace RabbitSubscription
         private Consumer _consumer;
         private Publisher _publisher;
         private Subject _subject;
-        private IUnitOfWork<Subscription> _databaseClient;
+        private IRepository<Subscription> _databaseClient;
         private string _subscriptionQueueKey;
         private string _subscriptionKey;
         private string _cancelSubscriptionKey;
 
-        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher, IUnitOfWork<Subscription> database)
+        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher, IRepository<Subscription> database)
         {
             _configPath = configPath;
             _configContent = new JsonFileContent(configPath);
@@ -69,6 +70,7 @@ namespace RabbitSubscription
                         _publisher);
 
                 SubscriptionStrategy strategy;
+
                 if (key.Equals(_subscriptionKey))
                 {
                     strategy = new SubscribeStrategy(_databaseClient, _subject, observer);
