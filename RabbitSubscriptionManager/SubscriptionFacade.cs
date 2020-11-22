@@ -14,22 +14,24 @@ namespace RabbitSubscription
         private Consumer _consumer;
         private Publisher _publisher;
         private Subject _subject;
-        private IRepository<Subscription> _databaseClient;
+        private SubscriptionUnitOfWork _unit;
+        private MySqlDatabaseClient _dbClien;
         private string _subscriptionQueueKey;
         private string _subscriptionKey;
         private string _cancelSubscriptionKey;
 
-        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher, IRepository<Subscription> database)
+        public SubscriptionFacade(string configPath, Consumer consumer, Publisher publisher, MySqlDatabaseClient database)
         {
             _configPath = configPath;
             _configContent = new JsonFileContent(configPath);
             _consumer = consumer;
             _publisher = publisher;
             _subject = new Subject();
-            _databaseClient = database;
+            _dbClien = database;
             _subscriptionQueueKey = Convert.ToString(_configContent.Value("SubscriotionQueueKey"));
             _subscriptionKey = Convert.ToString(_configContent.Value("SubscriotionKey"));
             _cancelSubscriptionKey = Convert.ToString(_configContent.Value("CanceledSubscriotionKey"));
+            _unit = new SubscriptionUnitOfWork(_dbClien);
             Restart();
         }
 
@@ -41,7 +43,7 @@ namespace RabbitSubscription
             {
                 _subject.Notify();
                 Thread.Sleep(1000);
-                _databaseClient.Save();
+                _unit.Save();
             }
         }
 
@@ -73,13 +75,13 @@ namespace RabbitSubscription
 
                 if (key.Equals(_subscriptionKey))
                 {
-                    strategy = new SubscribeStrategy(_databaseClient, _subject, observer);
+                    strategy = new SubscribeStrategy(_unit, _subject, observer);
                     strategy.Execute(feedbackContent);
                     continue;
                 }
                 if (key.Equals(_cancelSubscriptionKey))
                 {
-                    strategy = new AbortedSubscriptionStrategy(_databaseClient, _subject, observer);
+                    strategy = new AbortedSubscriptionStrategy(_unit, _subject, observer);
                     strategy.Execute(feedbackContent);
                     continue;
                 }
@@ -89,7 +91,7 @@ namespace RabbitSubscription
 
         private void Restart()
         {
-            var activeSubscriptions = _databaseClient.AllActive();
+            var activeSubscriptions = _dbClien.AllActive();
             Observer observer;
             foreach (var i in activeSubscriptions)
             {

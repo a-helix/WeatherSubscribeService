@@ -6,11 +6,11 @@ namespace RabbitSubscription
 {
     public abstract class SubscriptionStrategy
     {
-        protected IUnitOfWork<Subscription> unitOfWork;
+        protected SubscriptionUnitOfWork unitOfWork;
         protected Subject subject;
         protected Observer observer;
 
-        public SubscriptionStrategy(IUnitOfWork<Subscription> unit, Subject currentSubject, Observer currentObserver)
+        public SubscriptionStrategy(SubscriptionUnitOfWork unit, Subject currentSubject, Observer currentObserver)
         {
             unitOfWork = unit;
             subject = currentSubject;
@@ -22,7 +22,7 @@ namespace RabbitSubscription
 
     public class SubscribeStrategy : SubscriptionStrategy
     {
-        public SubscribeStrategy(IUnitOfWork<Subscription> unit, Subject currentSubject, Observer currentObserver) : base(unit, currentSubject, currentObserver)
+        public SubscribeStrategy(SubscriptionUnitOfWork unit, Subject currentSubject, Observer currentObserver) : base(unit, currentSubject, currentObserver)
         {
 
         }
@@ -40,13 +40,14 @@ namespace RabbitSubscription
             subscription.CreatedAt = DateTime.UtcNow.Ticks;
             subscription.ExpiredAt = 0;
             subscription.LastSent = DateTime.UtcNow.Ticks;
+            unitOfWork.Save();
             unitOfWork.Create(subscription);
         }
     }
 
     public class AbortedSubscriptionStrategy : SubscriptionStrategy
     {
-        public AbortedSubscriptionStrategy(IUnitOfWork<Subscription> unit, Subject currentSubject, Observer currentObserver) : base(unit, currentSubject, currentObserver)
+        public AbortedSubscriptionStrategy(SubscriptionUnitOfWork unit, Subject currentSubject, Observer currentObserver) : base(unit, currentSubject, currentObserver)
         {
 
         }
@@ -59,6 +60,7 @@ namespace RabbitSubscription
             subscription.ExpiredAt = DateTime.UtcNow.Ticks;
             unitOfWork.Delete(Convert.ToString(feedbackContent.Value("ID")));
             unitOfWork.Create(subscription);
+            unitOfWork.Save();
             subject.Detach(observer);
         }
     }

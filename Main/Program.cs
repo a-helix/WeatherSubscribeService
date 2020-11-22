@@ -42,7 +42,7 @@ namespace WeatherSubscribeService
         
         
 
-        public static void Main(string[] args)
+        public void Main(string[] args)
         {
             var launcer = new Program();
             launcer.Start();
