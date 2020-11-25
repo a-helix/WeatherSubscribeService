@@ -3,7 +3,7 @@ using System.Threading;
 using Credentials;
 using RabbitChat;
 using DatabaseClient;
-using Repository;
+using System.Threading.Tasks;
 
 namespace RabbitSubscription
 {
@@ -35,7 +35,7 @@ namespace RabbitSubscription
             Restart();
         }
 
-        public void Run()
+        public async Task Run()
         {
             Thread controlSubscriptions = new Thread(ControlSubscriptions);
             controlSubscriptions.Start();

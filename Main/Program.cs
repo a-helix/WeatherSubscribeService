@@ -1,51 +1,23 @@
-using Credentials;
-using DatabaseClient;
-using RabbitChat;
-using RabbitSubscription;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace WeatherSubscribeService
+
+namespace Main
 {
     public class Program
     {
-        JsonFileContent configContent;
-        Consumer consumer;
-        Publisher publisher;
-        MySqlDatabaseClient databaseClient;
-        SubscriptionFacade facade;
-
-        public Program()
+        public static void Main(string[] args)
         {
-            configContent = new JsonFileContent("configs.json");
-            consumer = new Consumer(
-            configContent.Value("RabbitUrl").ToString(),
-            configContent.Value("RabbitLogin").ToString(),
-            configContent.Value("RabbitPassword").ToString()
-            );
-            publisher = new Publisher(
-                configContent.Value("RabbitUrl").ToString(),
-                configContent.Value("RabbitLogin").ToString(),
-                configContent.Value("RabbitPassword").ToString()
-                );
-            databaseClient = new MySqlDatabaseClient(
-                configContent.Value("MySqlServer").ToString(),
-                configContent.Value("MySqlDatabase").ToString(),
-                configContent.Value("MySqlLogin").ToString(),
-                configContent.Value("MySqlPassword").ToString()
-                );
-            facade = new SubscriptionFacade("configs.json", consumer, publisher, databaseClient);
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public void Start()
-        {
-            facade.Run();
-        }
-        
-        
-
-        public void Main(string[] args)
-        {
-            var launcer = new Program();
-            launcer.Start();
-        }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .UseSystemd()
+            .ConfigureServices(services =>
+            {
+                services.AddHostedService<Intialization>();
+            });
     }
 }
