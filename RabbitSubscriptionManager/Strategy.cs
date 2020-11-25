@@ -40,8 +40,8 @@ namespace RabbitSubscription
             subscription.CreatedAt = DateTime.UtcNow.Ticks;
             subscription.ExpiredAt = 0;
             subscription.LastSent = DateTime.UtcNow.Ticks;
-            unitOfWork.Save();
-            unitOfWork.Create(subscription);
+            unitOfWork.Commit();
+            unitOfWork.Add(subscription);
         }
     }
 
@@ -54,13 +54,13 @@ namespace RabbitSubscription
 
         public override void Execute(JsonStringContent feedbackContent)
         {
-            Subscription subscription = unitOfWork.Read(Convert.ToString(feedbackContent.Value("ID")));
+            Subscription subscription = unitOfWork.GetByID(Convert.ToString(feedbackContent.Value("ID")));
             subscription.Active = false;
             subscription.Status = "Stoped";
             subscription.ExpiredAt = DateTime.UtcNow.Ticks;
-            unitOfWork.Delete(Convert.ToString(feedbackContent.Value("ID")));
-            unitOfWork.Create(subscription);
-            unitOfWork.Save();
+            unitOfWork.Remove(Convert.ToString(feedbackContent.Value("ID")));
+            unitOfWork.Add(subscription);
+            unitOfWork.Commit();
             subject.Detach(observer);
         }
     }

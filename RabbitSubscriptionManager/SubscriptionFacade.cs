@@ -43,7 +43,7 @@ namespace RabbitSubscription
             {
                 _subject.Notify();
                 Thread.Sleep(1000);
-                _unit.Save();
+                _unit.Commit();
             }
         }
 
