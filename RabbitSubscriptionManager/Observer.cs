@@ -46,7 +46,10 @@ namespace RabbitSubscription
             while(response == null)
             {
                 if (timer >= 1000 * 60)
+                {
                     response = "Service unavailable";
+                    continue;
+                }
                 response = _consumer.ReceiveQueue(_location);
                 System.Threading.Thread.Sleep(10);
             }

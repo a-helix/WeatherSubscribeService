@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitSubscription", "Rabbi
 		{E336B87F-D525-4909-8FE5-F18681BBC3EB} = {E336B87F-D525-4909-8FE5-F18681BBC3EB}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{7A502B9A-4025-4ADF-B39B-1F35C476C70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +44,10 @@ Global
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCE97E26-2701-4CDC-B1CF-6F691990A075}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3447A4E3-D3DD-46BC-8CFC-A480FEED6C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A502B9A-4025-4ADF-B39B-1F35C476C70E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A502B9A-4025-4ADF-B39B-1F35C476C70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A502B9A-4025-4ADF-B39B-1F35C476C70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A502B9A-4025-4ADF-B39B-1F35C476C70E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

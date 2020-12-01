@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 
-namespace Main
+namespace Launcher
 {
-    public class Program
+    public static class Program 
     {
         public static void Main(string[] args)
         {
