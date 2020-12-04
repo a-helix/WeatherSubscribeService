@@ -1,6 +1,6 @@
 [submodule "RabbitChat"]
 	path = RabbitChat
-	url = https@github.com:a-helix/RabbitChat.git
+	url = git@github.com:a-helix/RabbitChat.git
 [submodule "DatabaseClient"]
 	path = DatabaseClient
-	url = https@github.com:a-helix/DatabaseClient.git
+	url = git@github.com:a-helix/DatabaseClient.git
