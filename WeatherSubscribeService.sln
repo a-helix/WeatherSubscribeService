@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitSubscription", "Rabbi
 		{E336B87F-D525-4909-8FE5-F18681BBC3EB} = {E336B87F-D525-4909-8FE5-F18681BBC3EB}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{7A502B9A-4025-4ADF-B39B-1F35C476C70E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Main", "Main\Main.csproj", "{7A502B9A-4025-4ADF-B39B-1F35C476C70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
