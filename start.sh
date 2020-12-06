@@ -1,4 +1,5 @@
 #!/bin/bash
-rm -r src
+sudo rm -r src
 dotnet build WeatherSubscribeService.sln -c Release -o "src/"
-sudo mv src /src/
+sudo rm -r /src
+sudo mv src /src
