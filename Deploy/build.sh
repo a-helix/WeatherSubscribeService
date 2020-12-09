@@ -1,5 +1,10 @@
 #!/bin/bash
-sudo rm -r src
+if [[ -d src ]]
+	then
+		echo "Deleting old src..."
+		sudo rm -r src
+		echo "Done."
+fi
 echo "Building WeatherSubscribeService..."
 cd ..
 dotnet build WeatherSubscribeService.sln -c Release -o "src/"
