@@ -1,0 +1,14 @@
+{
+  "WeatherApiQueueKey": "WeatherApi",
+  "TelegramBotQueueKey": "TelegramBot",
+  "SubscriotionQueueKey": "Subscription",
+  "SubscriotionKey": "Subscribe",
+  "CanceledSubscriotionKey": "Canceled Subscription",
+  "RabbitUrl": "http://localhost:5672/",
+  "RabbitLogin": "test",
+  "RabbitPassword": "test",
+  "MySqlServer": "localhost",
+  "MySqlDatabase": "library",
+  "MySqlLogin": "root",
+  "MySqlPassword": "1234"
+}

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseClient\Credentials\Credentials\Credentials.csproj" />
+    <ProjectReference Include="..\DatabaseClient\DatabaseClient\DatabaseClient.csproj" />
+    <ProjectReference Include="..\RabbitChat\RabbitChat\RabbitChat.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+
+</Project>
