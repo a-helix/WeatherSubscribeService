@@ -18,9 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="build.sh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="configs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
